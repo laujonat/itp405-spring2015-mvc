@@ -12,8 +12,15 @@
 */
 
 Route::get('/', 'WelcomeController@index');
+Route::get('home', 'HomeController@index');
+
 Route::get('/dvds/search', 'DvdController@search');
 Route::get('/dvds', 'DvdController@results');
+
+Route::get('dvds/{id}', 'DvdController@details');
+Route::post('/dvds/details/{id}', 'DvdController@storeReview');
+
+
 
 
 ?>

@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use DB;  
+use Validator;
 
 class DvdModel {
 
@@ -53,6 +54,38 @@ class DvdModel {
 			return $query->get();
 
 	}
+
+    public static function addReview($review) {
+        DB::table('reviews')->insert($review);
+    }
+
+    public function getReview($id) {
+        $query = DB::table('reviews')
+            ->where('dvd_id', '=', $id );
+        return $query->get();
+    }
+    public function searchReviewId($id) {
+        $results = DB::table('dvds')
+            ->select('title', 'rating_name', 'genre_name', 'label_name', 'format_name', 'sound_name', 'release_date', 'dvds.id')
+            ->join('genres', 'genres.id', '=', 'dvds.genre_id')
+            ->join('labels', 'labels.id', '=', 'dvds.label_id')
+            ->join('formats', 'formats.id', '=', 'dvds.format_id')
+            ->join('sounds', 'sounds.id', '=', 'dvds.sound_id')
+            ->join('ratings', 'ratings.id', '=', 'dvds.rating_id')
+            ->where('dvds.id', '=', $id);
+        return $results->get();
+    }
+
+     public static function validate($input) {
+        // returns validator
+        return Validator::make($input, [
+            'title' => 'required|min:5',
+            'description' => 'required|min:20',
+            'rating' => 'required|integer'
+        ]);
+    }
+
+
 
 }
 
