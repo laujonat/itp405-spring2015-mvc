@@ -35,7 +35,6 @@
 	            <td><?php echo date("m/d/y g:i A", strtotime($dvds[0]->release_date)) ?></td>
             </tr>
         </tbpdy>
-
     </table>
 </div>
 

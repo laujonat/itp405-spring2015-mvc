@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Validator;
 
 
-class DvdModel extends Model{
+class Dvd extends Model{
     
     public static function getAllRatings() {
         
