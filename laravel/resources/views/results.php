@@ -36,7 +36,7 @@
 				<td><?php echo $dvd->sound_name ?></td>
 				<td><?php echo $dvd->format_name ?></td>
 				<td><?php echo $dvd->release_date ?></td>
-				<td><a href = "dvds/<?php echo $dvd->id ?>">Review</a></td>
+				<td><a href = "dvds/<?php echo $dvd->id ?>">Details</a></td>
 			</tr>
 			<?php endforeach ?>	
 		</tbody>

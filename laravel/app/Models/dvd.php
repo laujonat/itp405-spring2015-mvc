@@ -89,18 +89,28 @@ class Dvd extends Model{
     
     }
 
-    public function searchReviewId($id) {
-
+    public function searchReviewId($id){
         $results = DB::table('dvds')
-            ->select('title', 'rating_name', 'genre_name', 'label_name', 'format_name', 'sound_name', 'release_date', 'dvds.id')
-            ->join('genres', 'genres.id', '=', 'dvds.genre_id')
-            ->join('labels', 'labels.id', '=', 'dvds.label_id')
-            ->join('formats', 'formats.id', '=', 'dvds.format_id')
-            ->join('sounds', 'sounds.id', '=', 'dvds.sound_id')
-            ->join('ratings', 'ratings.id', '=', 'dvds.rating_id')
-            ->where('dvds.id', '=', $id);
-        return $results->get();
-    
+          ->join('ratings', 'ratings.id', '=', 'dvds.rating_id')
+          ->join('genres', 'genres.id', '=', 'dvds.genre_id')
+          ->join('labels', 'labels.id', '=', 'dvds.label_id')
+          ->join('sounds', 'sounds.id', '=', 'dvds.sound_id')
+          ->join('formats', 'formats.id', '=', 'dvds.format_id')
+          ->where('dvds.id', '=', $id)
+          ->get(array(
+                'dvds.id',
+                'title',
+                'rating_name',
+                'genre_name',
+                'label_name',
+                'sound_name',
+                'format_name',
+                'release_date'
+            ));
+        
+        foreach ($results as $result){
+            return $result; 
+        }
     }
      public static function validate($input) {
 

@@ -12,6 +12,9 @@
 
 <div class="container">
     <center><h1>DVD Details</h1></center>
+    <?php if($rData): ?>
+                <img src=" <?php echo $rData->posters->thumbnail ?> "> <!-- Json data retrieved successfully..issues with Json :( -->
+            <?php endif ?>
     <table class="table">
         <thead>
         <tr>
@@ -25,34 +28,58 @@
         </tr>
         </thead>
         <tbpdy>
-        	<tr>
-	            <td><?php echo $dvds[0]->title ?></td>
-	            <td><?php echo $dvds[0]->genre_name ?></td>
-	            <td><?php echo $dvds[0]->rating_name ?></td>
-	            <td><?php echo $dvds[0]->format_name ?></td>
-	            <td><?php echo $dvds[0]->sound_name ?></td>
-	            <td><?php echo $dvds[0]->label_name ?></td>
-	            <td><?php echo date("m/d/y g:i A", strtotime($dvds[0]->release_date)) ?></td>
+            <tr>
+                <td><?php echo $dvd->title ?></td>
+                <td><?php echo $dvd->genre_name ?></td>
+                <td><?php echo $dvd->rating_name ?></td>
+                <td><?php echo $dvd->format_name ?></td>
+                <td><?php echo $dvd->sound_name ?></td>
+                <td><?php echo $dvd->label_name ?></td>
+                <td><?php echo date("m/d/y g:i A", strtotime($dvd->release_date)) ?></td>
             </tr>
         </tbpdy>
     </table>
 </div>
 
+<div class = "container">
+    <table class = "table">
+            <thread>
+            <tr>
+                <th>Critics Score</th>
+                <th>Audience Score</th>
+                <th>Runtime</th>
+            </tr>
+            </thread>
+    <?php if($rData): ?> <!-- Don't know what's the json issue..dd($jj) shows all json information correctly -->
+            <tbpdy>
+            <tr>
+                <td><?php echo $rData->ratings->critics_score ?></td>
+                <td><?php echo $rData->ratings->audience_score ?></td>
+                <td><?php echo $rData->runtime ?></td>
+            </tr>
+            </tbpdy>
+                <h5>Cast:</h5>
+                <?php foreach ($rData->abridged_cast as $cast) : ?>
+                    <p><?php echo $cast->name ?></p>
+                <?php endforeach ?>
+    <?php endif ?>
+    </table>
+</div>
 <div class="container">
     <center><h1>Reviews</h1></center>
-	    <?php foreach ($reviews as $review) :?>
-	    	<div class="panel panel-default">
+        <?php foreach ($reviews as $review) :?>
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                    	<span class="badge"><?php echo $review->rating ?></span>
-                    	<?php echo $review->title ?>
-                	</h4>
+                        <span class="badge"><?php echo $review->rating ?></span>
+                        <?php echo $review->title ?>
+                    </h4>
                 </div>
                 <div class="panel-body">
-                	<?php echo $review->description ?>
+                    <?php echo $review->description ?>
                 </div>
             </div>
-	    <?php endforeach ?>
+        <?php endforeach ?>
 </div>
 
 <div class="container">
@@ -65,7 +92,7 @@
         <p style="color:red"><?php echo $error ?></p>
     <?php endforeach ?>
 
-    <form method = "post" action="/dvds/details/<?php echo $dvds[0]->id ?>">
+    <form method = "post" action="/dvds/details/<?php echo $dvd->id ?>">
         <input type = "hidden" name = "_token" value = "<?php echo csrf_token() ?>" >
 
         <div class="form-group">
@@ -92,7 +119,9 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
     </form>
+    <h5><a href="/dvds">Back to DVDs</a></h5>
 </div>
+
 
 
 </body>

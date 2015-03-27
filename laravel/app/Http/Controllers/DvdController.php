@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Dvd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\RottenTomatoes; 
+
 
 class DvdController extends Controller {
 
@@ -35,16 +37,41 @@ class DvdController extends Controller {
             'dvds' => $dvds
         ]);
     }
+
     public function details($id) {
-        $query = new Dvd();
-        $dvds = $query->searchReviewId($id);
+        
+        $query = new Dvd(); 
+        $dvd = $query->searchReviewId($id); 
         $reviews = $query->getReview($id);
-        return view('reviews', [    
-                'id'=>$id,
-                'reviews'=>$reviews, 
-                'dvds'=>$dvds 
-        ]);
-    }      
+        
+        $title = explode(" ", $dvd->title); 
+        $titleSearch = implode("+", $title); 
+        
+        $rottentomatoes = new RottenTomatoes();
+        $jsonString = $rottentomatoes->search($titleSearch); 
+        
+        $jj = json_encode($jsonString);
+        $dvds = json_decode($jj);
+        $rData =  null;
+        if(array_key_exists("movies", $dvds)){
+            $dvds = $dvds->movies; 
+            foreach($dvds as $dd) {
+                if((strcasecmp($dd->title, $dvd->title) >= -1 || (strcasecmp($dd->title, $dvd->title) <= 1))&& $dd->mpaa_rating == $dvd->rating_name){
+                    $rData = $dd;
+                    break;
+                }
+            }
+        }
+        
+        return view('reviews', [
+            'dvd_id' => $id,
+            'dvd' => $dvd,
+            'reviews' => $reviews,
+            'rData' => $rData   
+        ]); 
+        
+    }    
+        
     public function storeReview($id, Request $request) {
         $validate =  Dvd::validate($request->all());
         if($validate->passes()){

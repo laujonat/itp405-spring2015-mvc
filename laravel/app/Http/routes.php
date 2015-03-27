@@ -19,7 +19,7 @@ Route::get('/dvds/search', 'DvdController@search');
 Route::get('/dvds/search', 'DvdController@search');
 Route::get('/dvds', 'DvdController@results');
 
-Route::get('dvds/{id}', 'DvdController@details');
+Route::get('/dvds/{id}', 'DvdController@details');
 Route::post('/dvds/details/{id}', 'DvdController@storeReview');
 
 Route::get('/genres/{genreName}/dvds', 'DvdsController@genreResults');
